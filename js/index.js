@@ -1,7 +1,9 @@
 'use strict';
+var params = {
+  output: document.getElementById('output'),
+  result: document.getElementById('result'),
+}
 
-var output = document.getElementById('output');
-var result = document.getElementById('result');
 
 //Funkcja ruchu komputera
 
@@ -41,71 +43,40 @@ function compareScore(humanMove, playerMove) {
 
 //Funkcja wyniku człowieka
 
-var paper = document.getElementById('paper-button');
-var stone = document.getElementById('stone-button');
-var shears = document.getElementById('shears-button');
-
 document.getElementById('paper-button').disabled = true;
 document.getElementById('stone-button').disabled = true;
 document.getElementById('shears-button').disabled = true;
 
-// przycisk PAPIER
-paper.addEventListener('click', function (){
-  
-  var humanMove = 1;
-  var humanText = moveToText(1);
-  var playerMove = playerMoveResult();
-  var playerText = moveToText(playerMove);
-  var compareResult = compareScore(humanMove, playerMove);
-  
-  compareScore(humanMove, playerMove);
-  gameScoreText (humanText, playerText, compareResult);
-  humanSummary(compareResult);
-  playerSummary(compareResult);
-  displayResults(addScoreHuman, addScorePlayer);
-  finishRound();
-  theEnd();
-  });
+var buttons = document.getElementsByClassName('player-move');
 
-//PRZYCISK KAMIEŃ
-stone.addEventListener('click', function (){
-  
-	var humanMove = 2;
-  var humanText = moveToText(2);
-  var playerMove = playerMoveResult();
-  var playerText = moveToText(playerMove);
-  var compareResult = compareScore(humanMove, playerMove);
-  
-  compareScore(humanMove, playerMove);
-  gameScoreText (humanText, playerText, compareResult);
-  humanSummary(compareResult);
-  playerSummary(compareResult);
-  displayResults(addScoreHuman, addScorePlayer);
-  finishRound();
-  theEnd();
- });
 
-//PRZYCISK NOŻYCE
-shears.addEventListener('click', function (){
-  
-	var humanMove = 3;
-  var humanText = moveToText(3);
-  var playerMove = playerMoveResult();
-  var playerText = moveToText(playerMove);
-  var compareResult = compareScore(humanMove, playerMove);
-  
-  compareScore(humanMove, playerMove);
-  gameScoreText(humanText, playerText, compareResult);
-  humanSummary(compareResult);
-  playerSummary(compareResult);
-  displayResults(addScoreHuman, addScorePlayer);
-  finishRound();
-  theEnd();
- });
 
+// przyciski
+for (var i = 0; i < buttons.length; i++ ) {
+  
+
+buttons[i].addEventListener('click', function (){
+  
+    var humanMove = buttons[i].getAttribute('data-move');
+    var humanText = moveToText(i);
+     
+    var playerMove = playerMoveResult();
+    var playerText = moveToText(playerMove);
+    var compareResult = compareScore(humanMove, playerMove);
+  
+    compareScore(humanMove, playerMove);
+    gameScoreText (humanText, playerText, compareResult);
+    humanSummary(compareResult);
+    playerSummary(compareResult);
+    displayResults(addScoreHuman, addScorePlayer);
+    finishRound();
+    theEnd();
+  })};
+
+  
 //funkcja wyświetlania wyniku pojedynczej gry
 function gameScoreText (humanText, playerText, compareResult) { 
-output.innerHTML = 'wybór gracza: ' + humanText +  '<br><br>' + 'wybór komputera: ' + playerText + '<br><br>' + 'Wynik pojedynku: ' + compareResult;};
+params.output.innerHTML = 'wybór gracza: ' + humanText +  '<br><br>' + 'wybór komputera: ' + playerText + '<br><br>' + 'Wynik pojedynku: ' + compareResult;};
 
 //funkcje zliczania wyników i wyświetlania wyników
 
@@ -119,7 +90,7 @@ function playerSummary (scoreText) {
   if (scoreText === 'PRZEGRAŁEŚ!') {addScorePlayer += 1;}};
   
 function displayResults(addScoreHuman, addScorePlayer) {
-result.innerHTML = 'Wyniki rundy' + '<br><br>' + 'Wygrane gracza: ' + addScoreHuman +  '<br><br>' + 'Wygrane komputera: ' + addScorePlayer;
+params.result.innerHTML = 'Wyniki rundy' + '<br><br>' + 'Wygrane gracza: ' + addScoreHuman +  '<br><br>' + 'Wygrane komputera: ' + addScorePlayer;
 };
 
 
@@ -129,7 +100,7 @@ var numberGameText = document.getElementById('number-game');
 var numberGame;
 
 newGame.addEventListener('click', function(){
-	numberGameChoice = window.prompt('Do ilu wygranych gramy w jednej rundzie?');
+	var numberGameChoice = window.prompt('Do ilu wygranych gramy w jednej rundzie?');
   
   if ((!isNaN(numberGameChoice)) 
       && (numberGameChoice != 0))  {
@@ -157,8 +128,8 @@ function finishRound(){
       document.getElementById('paper-button').disabled = true;
       document.getElementById('stone-button').disabled = true;
       document.getElementById('shears-button').disabled = true;
-      result.innerHTML = '';
-      output.innerHTML = '';
+      params.result.innerHTML = '';
+      params.output.innerHTML = '';
       }
  else {endGame = false;}
   
@@ -178,3 +149,4 @@ if (endGame == true && numberGame === addScoreHuman) {
     
     addScorePlayer = 0;
     addScoreHuman = 0;}};
+

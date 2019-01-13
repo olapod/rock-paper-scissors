@@ -13,7 +13,7 @@
     "build": "npm-run-all build:* test",
     "build:docs": "mkdirp docs docs/css docs/js docs/images docs/icons docs/fonts temp",
     "build:copyhtml": "cp -R ./*.html ./temp",
-    "build:copyfonts": "cp -R ./fonts/*.* ./docs/fonts",
+   
     "build:clean": "rimraf css/*",
     "build:sass": "node-sass --output-style compact -o css sass",
     "build:autoprefixer": "autoprefixer-cli css/style.css",
