@@ -41,39 +41,72 @@ function compareScore(humanMove, playerMove) {
   return scoreText;
   };
 
+
+
 //Funkcja wyniku człowieka
+
+var paper = document.getElementById('paper-button');
+var stone = document.getElementById('stone-button');
+var shears = document.getElementById('shears-button');
 
 document.getElementById('paper-button').disabled = true;
 document.getElementById('stone-button').disabled = true;
 document.getElementById('shears-button').disabled = true;
 
-var buttons = document.getElementsByClassName('player-move');
-
-
-
-// przyciski
-for (var i = 0; i < buttons.length; i++ ) {
+// przycisk PAPIER
+paper.addEventListener('click', function (){
   
+  var humanMove = 1;
+  var humanText = moveToText(1);
+  var playerMove = playerMoveResult();
+  var playerText = moveToText(playerMove);
+  var compareResult = compareScore(humanMove, playerMove);
+  
+  compareScore(humanMove, playerMove);
+  gameScoreText (humanText, playerText, compareResult);
+  humanSummary(compareResult);
+  playerSummary(compareResult);
+  displayResults(addScoreHuman, addScorePlayer);
+  finishRound();
+  theEnd();
+  });
 
-buttons[i].addEventListener('click', function (){
+//PRZYCISK KAMIEŃ
+stone.addEventListener('click', function (){
   
-    var humanMove = buttons[i].getAttribute('data-move');
-    var humanText = moveToText(i);
-     
-    var playerMove = playerMoveResult();
-    var playerText = moveToText(playerMove);
-    var compareResult = compareScore(humanMove, playerMove);
+	var humanMove = 2;
+  var humanText = moveToText(2);
+  var playerMove = playerMoveResult();
+  var playerText = moveToText(playerMove);
+  var compareResult = compareScore(humanMove, playerMove);
   
-    compareScore(humanMove, playerMove);
-    gameScoreText (humanText, playerText, compareResult);
-    humanSummary(compareResult);
-    playerSummary(compareResult);
-    displayResults(addScoreHuman, addScorePlayer);
-    finishRound();
-    theEnd();
-  })};
+  compareScore(humanMove, playerMove);
+  gameScoreText (humanText, playerText, compareResult);
+  humanSummary(compareResult);
+  playerSummary(compareResult);
+  displayResults(addScoreHuman, addScorePlayer);
+  finishRound();
+  theEnd();
+ });
 
+//PRZYCISK NOŻYCE
+shears.addEventListener('click', function (){
   
+	var humanMove = 3;
+  var humanText = moveToText(3);
+  var playerMove = playerMoveResult();
+  var playerText = moveToText(playerMove);
+  var compareResult = compareScore(humanMove, playerMove);
+  
+  compareScore(humanMove, playerMove);
+  gameScoreText(humanText, playerText, compareResult);
+  humanSummary(compareResult);
+  playerSummary(compareResult);
+  displayResults(addScoreHuman, addScorePlayer);
+  finishRound();
+  theEnd();
+ });
+
 //funkcja wyświetlania wyniku pojedynczej gry
 function gameScoreText (humanText, playerText, compareResult) { 
 params.output.innerHTML = 'wybór gracza: ' + humanText +  '<br><br>' + 'wybór komputera: ' + playerText + '<br><br>' + 'Wynik pojedynku: ' + compareResult;};
