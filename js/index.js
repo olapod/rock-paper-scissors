@@ -4,8 +4,13 @@ var params = {
   result: document.getElementById('result'),
   addScoreHuman: 0,
   addScorePlayer: 0,
+  roundResult: document.getElementById('round-score'),
   newGame: document.getElementById('newgame-button'),
   numberGameText: document.getElementById('number-game'),
+  progress: [],
+  clicksNumber: 0,
+  
+ 
 }
 
 
@@ -47,41 +52,7 @@ function compareScore(humanMove, playerMove) {
 
 
 
-//Funkcja wyniku człowieka
 
-
-var buttonsList = document.getElementsByClassName('player-move');
-
-
-
-
-for (var i=0; i < buttonsList.length; i++) {
-  initClickWatch(i);
-  }
-
-
-function initClickWatch(value) {
-  
-  buttonsList[value].addEventListener('click', function() {
-  var humanMoveAttribute = buttonsList[value].getAttribute('data-move');
-  var humanMove = Number(humanMoveAttribute);
-
-  var humanText = moveToText(humanMove);
-  var playerMove = playerMoveResult();
-  var playerText = moveToText(playerMove);
-  var compareResult = compareScore(humanMove, playerMove);
-  
-  compareScore(humanMove, playerMove);
-  gameScoreText (humanText, playerText, compareResult);
-  humanSummary(compareResult);
-  playerSummary(compareResult);
-  displayResults(params.addScoreHuman, params.addScorePlayer);
-  finishRound();
-  theEnd();
-
-
-     });        
-    }
   
 //funkcja blokowania klawiszy
 
@@ -109,6 +80,13 @@ function displayResults(addScoreHuman, addScorePlayer) {
 params.result.innerHTML = 'Wyniki rundy' + '<br><br>' + 'Wygrane gracza: ' + params.addScoreHuman +  '<br><br>' + 'Wygrane komputera: ' + params.addScorePlayer;
 };
 
+ // licznik gier  
+  
+ function ClicksCount() {
+  
+  params.clicksNumber += 1;
+  
+}
 
 //funkcja nowa gra i liczba rund
 
@@ -153,18 +131,70 @@ function finishRound(){
 function theEnd(){
   
 if (endGame == true && numberGame === params.addScoreHuman) {
-    params.numberGameText.innerHTML = 'WYGRAŁEŚ RUNDĘ! :) KONIEC GRY! NACIŚNIJ PRZYCISK NOWA RUNDA';
-    showModal();
+    params.roundResult.innerHTML = 'WYGRAŁEŚ RUNDĘ! :) KONIEC GRY! NACIŚNIJ PRZYCISK NOWA RUNDA';
+    showModal(event);
     params.addScorePlayer = 0;
     params.addScoreHuman = 0;
   }
   
   else if (endGame == true && numberGame === params.addScorePlayer) {
-   params.numberGameText.innerHTML = 'PRZEGRAŁEŚ RUNDĘ! :( KONIEC GRY! NACIŚNIJ PRZYCISK NOWA RUNDA';
-    
+   params.roundResult.innerHTML = 'PRZEGRAŁEŚ RUNDĘ! :( KONIEC GRY! NACIŚNIJ PRZYCISK NOWA RUNDA';
+   showModal(event);
     params.addScorePlayer = 0;
     params.addScoreHuman = 0;}};
 
+    //Funkcja wyniku człowieka
+
+
+var buttonsList = document.getElementsByClassName('player-move');
+
+
+
+
+for (var i=0; i < buttonsList.length; i++) {
+  initClickWatch(i);
+  }
+
+
+function initClickWatch(value) {
+  
+  buttonsList[value].addEventListener('click', function() {
+  var humanMoveAttribute = buttonsList[value].getAttribute('data-move');
+  var humanMove = Number(humanMoveAttribute);
+
+  var humanText = moveToText(humanMove);
+  var playerMove = playerMoveResult();
+  var playerText = moveToText(playerMove);
+  var compareResult = compareScore(humanMove, playerMove);
+  
+
+  compareScore(humanMove, playerMove);
+  gameScoreText (humanText, playerText, compareResult);
+  humanSummary(compareResult);
+  playerSummary(compareResult);
+  displayResults(params.addScoreHuman, params.addScorePlayer);
+  finishRound();
+  theEnd();
+  params.progress.push (new saveProgress(params.clicksNumber, humanText, playerText, compareResult, params.addScorePlayer, params.addScoreHuman));
+   console.log(params.progress);
+
+   for (var i = 0; i < params.progress.length; i++) {
+      var node = document.createElement("tr")
+      for (var key of ['gameNo', 'human', 'player', 'gameScore', 'lostNo', 'winNo']) {
+        var tb = document.createElement("td")
+        tb.innerHTML = params.progress[i][key]
+        node.appendChild(tb)
+      }
+      document.getElementById("my-data").appendChild(node);
+    }
+   
+  
+     });        
+    }
+    
+
+    
+        
     
     //Funkcja wyświetlania modala
 
@@ -182,13 +212,7 @@ if (endGame == true && numberGame === params.addScoreHuman) {
           
       };
       
-       //TUTAJ ZMIENIC!!!!!!!!!!        
-      // var  modalOneLink = document.querySelector("a[href='#modal-one']");
       
-      //    modalOneLink.addEventListener('click', showModal);
-      
-      
-      // Dodajemy też funkcję zamykającą modal, oraz przywiązujemy ją do kliknięć na elemencie z klasą "close". 
     
       var hideModal = function(event){
         event.preventDefault();
@@ -215,4 +239,17 @@ if (endGame == true && numberGame === params.addScoreHuman) {
         });
       }
     
+    
+function saveProgress(gameNo, human, player, gameScore, lostNo, winNo) {
+  this.gameNo = gameNo;
+  this.human = human;
+  this.player = player;
+  this.gameScore = gameScore;
+  this.lostNo = lostNo;
+  this.winNo = winNo;
+  }
 
+  
+  
+
+      
