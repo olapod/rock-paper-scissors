@@ -10,8 +10,10 @@ var params = {
   progress: [],
   clicksNumber: 0,
   
+  
  
 }
+
 
 
 //Funkcja ruchu komputera
@@ -82,7 +84,7 @@ params.result.innerHTML = 'Wyniki rundy' + '<br><br>' + 'Wygrane gracza: ' + par
 
  // licznik gier  
   
- function ClicksCount() {
+ function clicksCount() {
   
   params.clicksNumber += 1;
   
@@ -175,26 +177,31 @@ function initClickWatch(value) {
   displayResults(params.addScoreHuman, params.addScorePlayer);
   finishRound();
   theEnd();
-  params.progress.push (new saveProgress(params.clicksNumber, humanText, playerText, compareResult, params.addScorePlayer, params.addScoreHuman));
-   console.log(params.progress);
+  data.push(params.clicksNumber, humanText, playerText, compareResult, params.addScorePlayer, params.addScoreHuman)
+  
+  
+  console.log(data);
+  var finalData = data[-1];
+console.log('final data: ' +finalData)
+  
+})}
+   
 
-   for (var i = 0; i < params.progress.length; i++) {
-      var node = document.createElement("tr")
-      for (var key of ['gameNo', 'human', 'player', 'gameScore', 'lostNo', 'winNo']) {
+   for (var i = 0; i < finalData.length; i++) {
+      var node = document.createElement('tr');
+      // for (var key of ['gameNo', 'human', 'player', 'gameScore', 'lostNo', 'winNo']) {\
+      for (var key in finalData[i]) {
         var tb = document.createElement("td")
-        tb.innerHTML = params.progress[i][key]
+        tb.innerHTML =finalData[i][key]
         node.appendChild(tb)
       }
-      document.getElementById("my-data").appendChild(node);
+      document.getElementById('my-data').appendChild(node);
     }
    
-  
-     });        
-    }
+     
     
 
-    
-        
+          
     
     //Funkcja wyświetlania modala
 
@@ -217,7 +224,10 @@ function initClickWatch(value) {
       var hideModal = function(event){
         event.preventDefault();
         document.querySelector('#modal-overlay').classList.remove('show');
-        
+        params.progress.length = 0;
+        var dataTable = document.getElementById('my-data')
+              
+        dataTable.innerHTML = '';
       };
       
       var closeButtons = document.querySelectorAll('.modal .close');
@@ -240,16 +250,12 @@ function initClickWatch(value) {
         });
       }
     
-    
-function saveProgress(gameNo, human, player, gameScore, lostNo, winNo) {
-  this.gameNo = gameNo;
-  this.human = human;
-  this.player = player;
-  this.gameScore = gameScore;
-  this.lostNo = lostNo;
-  this.winNo = winNo;
-  }
-
-    
-
-      
+      var data = function saveProgress(gameNo, human, player, gameScore, lostNo, winNo) {
+        this.gameNo = gameNo;
+        this.human = human;
+        this.player = player;
+        this.gameScore = gameScore;
+        this.lostNo = lostNo;
+        this.winNo = winNo;
+        }
+  
