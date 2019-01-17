@@ -217,6 +217,7 @@ function initClickWatch(value) {
       var hideModal = function(event){
         event.preventDefault();
         document.querySelector('#modal-overlay').classList.remove('show');
+        
       };
       
       var closeButtons = document.querySelectorAll('.modal .close');
@@ -249,7 +250,6 @@ function saveProgress(gameNo, human, player, gameScore, lostNo, winNo) {
   this.winNo = winNo;
   }
 
-  
-  
+    
 
       
