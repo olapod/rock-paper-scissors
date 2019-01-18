@@ -9,10 +9,7 @@ var params = {
   numberGameText: document.getElementById('number-game'),
   progress: [],
   clicksNumber: 0,
-  
-  
- 
-}
+  }
 
 
 
@@ -52,10 +49,6 @@ function compareScore(humanMove, playerMove) {
   return scoreText;
   };
 
-
-
-
-  
 //funkcja blokowania klawiszy
 
 document.getElementById('paper-button').disabled = true;
@@ -111,7 +104,6 @@ else {params.numberGameText.innerHTML = 'Podaj LICZBĘ rund! '};
   return numberGame;
 });
 
-
 //funkcje kończenia rundy
 var endGame;
 
@@ -125,6 +117,7 @@ function finishRound(){
       document.getElementById('shears-button').disabled = true;
       params.result.innerHTML = '';
       params.output.innerHTML = '';
+      
       }
  else {endGame = false;}
   
@@ -133,17 +126,36 @@ function finishRound(){
 function theEnd(){
   
 if (endGame == true && numberGame === params.addScoreHuman) {
-    params.roundResult.innerHTML = 'WYGRAŁEŚ RUNDĘ! :) KONIEC GRY! NACIŚNIJ PRZYCISK NOWA RUNDA';
-    showModal(event);
-    params.addScorePlayer = 0;
-    params.addScoreHuman = 0;
+    
+  showSummary();
+    
+    params.roundResult.innerHTML = 'WYGRAŁEŚ RUNDĘ! :(' + '<br>' + 'Wygrane gracza: ' + params.addScoreHuman + '  Wygrane komputera: ' + params.addScorePlayer;
+    
   }
   
   else if (endGame == true && numberGame === params.addScorePlayer) {
-   params.roundResult.innerHTML = 'PRZEGRAŁEŚ RUNDĘ! :( KONIEC GRY! NACIŚNIJ PRZYCISK NOWA RUNDA';
-   showModal(event);
-    params.addScorePlayer = 0;
-    params.addScoreHuman = 0;}};
+   
+    showSummary();
+    params.roundResult.innerHTML = 'PRZEGRAŁEŚ RUNDĘ! :(' + '<br>' + 'Wygrane gracza: ' + params.addScoreHuman + '  Wygrane komputera: ' + params.addScorePlayer;
+   
+   console.log(params.addScoreHuman, params.addScorePlayer)
+  }};
+
+
+  function showSummary() {
+    showModal(event);
+   
+    for (var i = 0; i < params.progress.length; i++) {
+      var node = document.createElement("tr")
+      for (var key of ['gameNo', 'human', 'player', 'gameScore']) {
+        var tb = document.createElement("td")
+        tb.innerHTML = params.progress[i][key]
+        node.appendChild(tb)
+      }
+      document.getElementById("my-data").appendChild(node);
+    }
+    params.numberGameText.innerHTML = 'NACIŚNIJ PRZYCISK NOWA RUNDA';
+  }
 
     //Funkcja wyniku człowieka
 
@@ -158,49 +170,39 @@ for (var i=0; i < buttonsList.length; i++) {
   }
 
 
-function initClickWatch(value) {
+  function initClickWatch(value) {
   
-  buttonsList[value].addEventListener('click', function() {
-  var humanMoveAttribute = buttonsList[value].getAttribute('data-move');
-  var humanMove = Number(humanMoveAttribute);
-
-  var humanText = moveToText(humanMove);
-  var playerMove = playerMoveResult();
-  var playerText = moveToText(playerMove);
-  var compareResult = compareScore(humanMove, playerMove);
+    buttonsList[value].addEventListener('click', function() {
+    var humanMoveAttribute = buttonsList[value].getAttribute('data-move');
+    var humanMove = Number(humanMoveAttribute);
   
-
-  compareScore(humanMove, playerMove);
-  gameScoreText (humanText, playerText, compareResult);
-  humanSummary(compareResult);
-  playerSummary(compareResult);
-  displayResults(params.addScoreHuman, params.addScorePlayer);
-  finishRound();
-  theEnd();
-  data.push(params.clicksNumber, humanText, playerText, compareResult, params.addScorePlayer, params.addScoreHuman)
-  
-  
-  console.log(data);
-  var finalData = data[-1];
-console.log('final data: ' +finalData)
-  
-})}
-   
-
-   for (var i = 0; i < finalData.length; i++) {
-      var node = document.createElement('tr');
-      // for (var key of ['gameNo', 'human', 'player', 'gameScore', 'lostNo', 'winNo']) {\
-      for (var key in finalData[i]) {
-        var tb = document.createElement("td")
-        tb.innerHTML =finalData[i][key]
-        node.appendChild(tb)
-      }
-      document.getElementById('my-data').appendChild(node);
-    }
-   
-     
+    var humanText = moveToText(humanMove);
+    var playerMove = playerMoveResult();
+    var playerText = moveToText(playerMove);
+    var compareResult = compareScore(humanMove, playerMove);
+    var game = {
+      gameNo: params.clicksNumber,
+      human: humanText,
+      player: playerText,
+      gameScore: compareResult,
+     }
+    
+    params.progress.push(game);
     
 
+    compareScore(humanMove, playerMove);
+    gameScoreText (humanText, playerText, compareResult);
+    humanSummary(compareResult);
+    playerSummary(compareResult);
+    displayResults(params.addScoreHuman, params.addScorePlayer);
+    finishRound();
+    theEnd();
+
+      
+    
+       });        
+      }
+      
           
     
     //Funkcja wyświetlania modala
@@ -224,10 +226,12 @@ console.log('final data: ' +finalData)
       var hideModal = function(event){
         event.preventDefault();
         document.querySelector('#modal-overlay').classList.remove('show');
-        params.progress.length = 0;
-        var dataTable = document.getElementById('my-data')
-              
-        dataTable.innerHTML = '';
+        params.progress.length = 0; 
+        var table = document.getElementById('my-data');
+        table.innerHTML = '';
+        params.clicksNumber = 0;
+        params.addScoreHuman = 0;
+        params.addScorePlayer = 0;
       };
       
       var closeButtons = document.querySelectorAll('.modal .close');
@@ -250,12 +254,5 @@ console.log('final data: ' +finalData)
         });
       }
     
-      var data = function saveProgress(gameNo, human, player, gameScore, lostNo, winNo) {
-        this.gameNo = gameNo;
-        this.human = human;
-        this.player = player;
-        this.gameScore = gameScore;
-        this.lostNo = lostNo;
-        this.winNo = winNo;
-        }
+     
   
