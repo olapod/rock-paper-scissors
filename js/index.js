@@ -240,8 +240,7 @@ function initClickWatch(value) {
 
 function showModal(event){
   
-  event.preventDefault();
-        
+     
   var modals =  document.querySelectorAll('.modal');
         
   for(var i = 0; i < modals.length; i++){
@@ -258,7 +257,6 @@ function showModal(event){
     
 var hideModal = function(event){
   
-  event.preventDefault();
   document.querySelector('#modal-overlay').classList.remove('show');
   params.progress.length = 0; 
   var table = document.getElementById('my-data');
